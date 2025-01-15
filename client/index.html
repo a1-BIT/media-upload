@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Media Mania</title>
+  </head>
+  <body class="flex flex-col bg-gray-300 min-h-screen">
+    <header class="bg-blue-100 px-5 py-5">
+      <h1 class="text-bold text-xl">Media Mania</h1>
+    </header>
+    <main class="flex-grow mx-auto">
+      <div class="container">
+        <div class="border rounded px-5 py-5 flex flex-col">
+          <label for="mediaUpload" class="text-center">
+            Choose a file to upload
+          </label>
+          <input
+            type="file"
+            name=""
+            id="mediaUpload"
+            class="file:bg-green-100 file:px-3 file:py-3 file:hover:bg-green-200"
+          />
+        </div>
+      </div>
+    </main>
+    <footer class="bg-blue-400 px-3 py-3">
+      <div class="text-center">&copy; Do, untill done.</div>
+    </footer>
+  </body>
+</html>

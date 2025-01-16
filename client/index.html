@@ -1,80 +1,73 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Media Mania</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Media Mania</title>
-</head>
-
-<body class="flex flex-col bg-gray-300 min-h-screen">
-  <header class="bg-blue-100 px-5 py-5">
-    <h1 class="text-bold text-xl">Media Mania</h1>
-  </header>
-  <main class="flex-grow px-4 py-8">
-    <div class="text-lg mb-4">
-      Welcome to Media Mania! Start by uploading your media files.
-    </div>
-    <div class="container mx-auto text-center">
-      <img src="" alt="" id="img_preview">
-      <label for="file_upload" class="block text-sm font-medium text-gray-700 mb-2">Choose a file to upload:</label>
-      <input id="file_upload" type="file" accept="image/*, video/*"
-        class="block mx-auto w-full max-w-xs border border-gray-300 rounded-lg py-2 px-3 text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
-        multiple onchange="getImgData(this)" />
-      <h4 class="text-bold text-gray-700 text-start">Preview Image</h4>
-      <div id="image_container" class="flex flex-row h-32 w-52 gap-3">
-
+  <body class="flex flex-col bg-gray-300 min-h-screen">
+    <header class="bg-blue-100 px-5 py-5">
+      <h1 class="text-bold text-xl">Media Mania</h1>
+    </header>
+    <main class="flex-grow px-4 py-8">
+      <div class="text-lg mb-4">
+        Welcome to Media Mania! Start by uploading your media files.
       </div>
-      <h4 class="text-bold text-gray-700 text-start">Preview Video</h4>
-      <div id="video_container" class="flex flex-row h-52 w-52 gap-3">
-
+      <div class="container mx-auto text-center">
+        <img src="" alt="" id="img_preview" />
+        <label
+          for="file_upload"
+          class="block text-sm font-medium text-gray-700 mb-2"
+          >Choose a file to upload:</label
+        >
+        <input
+          id="file_upload"
+          type="file"
+          accept="image/*, video/*"
+          class="block mx-auto w-full max-w-xs border border-gray-300 rounded-lg py-2 px-3 text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
+          multiple
+          onchange="getImgData(this)"
+        />
+        <h4 class="text-bold text-gray-700 text-start">Preview Image</h4>
+        <div id="image_container" class="flex flex-row gap-3"></div>
+        <h4 class="text-bold text-gray-700 text-start">Preview Video</h4>
+        <div id="video_container" class="flex flex-row h-52 w-52 gap-3"></div>
       </div>
-    </div>
+    </main>
+    <footer class="bg-blue-400 px-3 py-3">
+      <div class="text-center">&copy; Do, untill done.</div>
+    </footer>
+  </body>
+  <script>
+    const chooseFile = document.getElementById("file_upload");
+    const imgPreview = document.getElementById("img_preview");
 
-  </main>
-  <footer class="bg-blue-400 px-3 py-3">
-    <div class="text-center">&copy; Do, untill done.</div>
-  </footer>
-</body>
-<script>
-  const chooseFile = document.getElementById("file_upload");
-  const imgPreview = document.getElementById("img_preview");
-
-
-  function getImgData(input) {
-    console.log(input.files, "Files")
-    if (input.files && (input.files).length > 0) {
-      const n = (input.files).length
-      const files = input.files
-      for (let i = 0; i < n; i++) {
-        console.log(i)
-        console.log(files[i].type)
-        let reader = new FileReader()
-        if ((files[i].type).split('/')[0] == 'image') {
-          reader.onload = function (e) {
-            const newImg = document.createElement("img")
-            newImg.src = e.target.result
-
-            document.getElementById('image_container').appendChild(newImg);
+    function getImgData(input) {
+      if (input.files && input.files.length > 0) {
+        const n = input.files.length;
+        const files = input.files;
+        for (let i = 0; i < n; i++) {
+          if (files[i].type.split("/")[0] == "image") {
+            const newImg = document.createElement("img");
+            let url = URL.createObjectURL(files[i]);
+            newImg.src = url;
+            newImg.classList.add("w-52", "h-52");
+            document.getElementById("image_container").appendChild(newImg);
+            URL.revokeObjectURL(url);
+          }
+          if (files[i].type.split("/")[0] == "video") {
+            const newVideo = document.createElement("video");
+            let urlV = URL.createObjectURL(files[i]);
+            newVideo.src = urlV;
+            newVideo.controls = true;
+            newVideo.classList.add("w-52", "h-52");
+            document.getElementById("video_container").appendChild(newVideo);
+            URL.revokeObjectURL(url);
           }
         }
-        if ((files[i].type).split('/')[0] == 'video') {
-          reader.onload = function (e) {
-            const newVideo = document.createElement("video")
-            newVideo.src = e.target.result
-            newVideo.autoplay = true
-            document.getElementById('video_container').appendChild(newVideo);
-          }
-        }
-
-
-        reader.readAsDataURL(files[i]);
       }
-
     }
-  }
-
-</script>
-
+  </script>
 </html>

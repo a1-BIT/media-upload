@@ -1,108 +1,170 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Media Mania</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Media Mania</title>
-</head>
-
-<body class="flex flex-col bg-gray-300 min-h-screen">
-  <header class="bg-blue-100 px-5 py-5">
-    <h1 class="font-bold text-xl">Media Mania</h1>
-  </header>
-  <main class="flex-grow px-4 py-8">
-    <div class="text-lg mb-4">
-      Welcome to Media Mania! Start by uploading your media files.
-    </div>
-    <div class="container mx-auto text-center">
-      <label for="file_upload"
-        class="block text-sm font-medium text-gray-700 mb-2 mr-4 py-2 px-4 w-52 rounded-full border-0 text-sm font-semibold bg-green-100 text-green-700 hover:bg-green-200">Choose
-        file to upload</label>
-      <input id="file_upload" type="file" accept="image/*, video/*"
-        class="hidden block mx-auto w-full max-w-xs border border-gray-300 rounded-lg py-2 px-3 text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
-        multiple onchange="getImgData(this)" aria-label="Upload media files" />
-
-      <!-- Responsive flex layout for preview containers -->
-      <div class="flex flex-wrap mt-6 space-x-6 justify-center">
-        <!-- Image Preview Section -->
-        <div class="flex-1 min-w-[280px] sm:min-w-[400px]">
-          <h4 class="font-bold text-gray-700 text-start mt-4">Preview Image<span id="image_count">Total Images: (0)</span></h4>
-          <div id="image_container"
-            class="flex flex-row flex-wrap gap-3 h-auto max-h-96 overflow-auto border rounded-lg p-2 bg-gray-200"></div>
+  <body class="flex flex-col bg-gray-300 min-h-screen">
+    <header class="bg-blue-100 px-5 py-5">
+      <h1 class="font-bold text-xl">Media Mania</h1>
+    </header>
+    <main class="flex-grow px-4 py-8">
+      <div class="text-lg mb-4">
+        Welcome to Media Mania! Start by uploading your media files.
+      </div>
+      <div class="container mx-auto text-center">
+        <div class="flex flex-row justify-between items-center space-x-4">
+          <div>
+            <label
+              for="file_upload"
+              class="block text-sm font-medium text-gray-700 mb-2 mr-4 py-2 px-4 w-52 rounded-full border-0 text-sm font-semibold bg-green-100 text-green-700 hover:bg-green-200 cursor-pointer"
+              >Choose file to upload</label
+            >
+            <input
+              id="file_upload"
+              type="file"
+              accept="image/*, video/*"
+              class="hidden block mx-auto w-full max-w-xs border border-gray-300 rounded-lg py-2 px-3 text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
+              multiple
+              onchange="getImgData(this)"
+              aria-label="Upload media files"
+            />
+          </div>
+          <div class="">
+            <button
+              class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600"
+            >
+              Upload
+            </button>
+          </div>
         </div>
+        <!-- Responsive flex layout for preview containers -->
+        <div class="flex flex-wrap mt-6 gap-4 justify-center">
+          <!-- Image Preview Section -->
+          <div class="flex-1 min-w-[280px] sm:min-w-[400px]">
+            <h4 class="font-bold text-gray-700 text-start mt-4">
+              Preview Image <span id="image_count"></span>
+            </h4>
+            <div
+              id="image_container"
+              class="flex flex-row flex-wrap gap-3 h-auto max-h-96 overflow-auto border rounded-lg p-2 bg-gray-200"
+            ></div>
+          </div>
 
-        <!-- Video Preview Section -->
-        <div class="flex-1 min-w-[280px] sm:min-w-[400px]">
-          <h4 class="font-bold text-gray-700 text-start mt-4">Preview Video <span id="video_count">Total Videos: (0)</span></h4>
-          <div id="video_container"
-            class="flex flex-row flex-wrap gap-3 h-auto max-h-96 overflow-auto border rounded-lg p-2 bg-gray-200"></div>
+          <!-- Video Preview Section -->
+          <div class="flex-1 min-w-[280px] sm:min-w-[400px]">
+            <h4 class="font-bold text-gray-700 text-start mt-4">
+              Preview Video <span id="video_count"></span>
+            </h4>
+            <div
+              id="video_container"
+              class="flex flex-row flex-wrap gap-3 h-auto max-h-96 overflow-auto border rounded-lg p-2 bg-gray-200"
+            ></div>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
-  <footer class="bg-blue-400 px-3 py-3">
-    <div class="text-center">&copy; Do, until done.</div>
-  </footer>
-</body>
+    </main>
+    <footer class="bg-blue-400 px-3 py-3">
+      <div class="text-center">&copy; Do, until done.</div>
+    </footer>
+  </body>
 
-<script>
-  function getImgData(input) {
-    if (input.files && input.files.length > 0) {
-      const imageContainer = document.getElementById("image_container");
-      const videoContainer = document.getElementById("video_container");
-      let imageCount = 0
-      let videoCount = 0
-      Array.from(input.files).forEach((file, index) => {
-        const fileType = file.type.split("/")[0];
-        const url = URL.createObjectURL(file);
+  <script>
+    let imageCount = 0;
+    let videoCount = 0;
+    document.getElementById("image_count").textContent = imageCount;
+    document.getElementById("video_count").textContent = videoCount;
+    function getImgData(input) {
+      if (input.files && input.files.length > 0) {
+        const imageContainer = document.getElementById("image_container");
+        const videoContainer = document.getElementById("video_container");
 
-        const mediaWrapper = document.createElement('div')
-        mediaWrapper.classList.add('relative', 'inline-block')
-        const cancelButton = document.createElement("button");
-        cancelButton.textContent = 'X'
-        cancelButton.classList.add(
-          "absolute",
-          "top-0",
-          "right-0",
-          "bg-red-500",
-          "text-black",
-          "rounded-full",
-          "text-xs",
-          "w-5",
-          "h-5",
-          "flex",
-          "items-center",
-          "justify-center",
-          "cursor-pointer"
-        );
-        cancelButton.onclick = () => mediaWrapper.remove();
-        if (fileType === "image") {
-          imageCount++
-          const newImg = document.createElement("img");
-          newImg.src = url;
-          newImg.alt = `Uploaded image ${index + 1}`;
-          newImg.classList.add("w-56", "h-52", "object-cover", "border", "rounded-lg");
-          mediaWrapper.appendChild(newImg);
-        } else if (fileType === "video") {
-          videoCount++
-          const newVideo = document.createElement("video");
-          newVideo.src = url;
-          newVideo.controls = true;
-          newVideo.classList.add("w-56", "h-52", "object-contain", "border", "rounded-lg");
-          mediaWrapper.appendChild(newVideo);
-        }
-        mediaWrapper.appendChild(cancelButton);
-        if (fileType === "image") {
-          imageContainer.appendChild(mediaWrapper);
-        } else if (fileType === "video") {
-          videoContainer.appendChild(mediaWrapper);
-        }
-      });
+        Array.from(input.files).forEach((file, index) => {
+          const fileType = file.type.split("/")[0];
+          const url = URL.createObjectURL(file);
+
+          const mediaWrapper = document.createElement("div");
+          mediaWrapper.classList.add("relative", "inline-block");
+          const mediaName = document.createElement("span");
+          mediaName.classList.add("text-sm", "font-bold");
+          const cancelButton = document.createElement("button");
+          cancelButton.textContent = "X";
+          cancelButton.setAttribute("aria-label", "Remove file");
+          cancelButton.classList.add(
+            "absolute",
+            "top-0",
+            "right-0",
+            "bg-red-500",
+            "text-black",
+            "rounded-full",
+            "text-xs",
+            "w-5",
+            "h-5",
+            "flex",
+            "items-center",
+            "justify-center",
+            "cursor-pointer"
+          );
+          cancelButton.onclick = () => {
+            console.log(fileType, "LL");
+            if (fileType == "video") {
+              document.getElementById("video_count").textContent = --videoCount;
+            }
+            if (fileType == "image") {
+              document.getElementById("image_count").textContent = --imageCount;
+            }
+            URL.revokeObjectURL(url);
+            mediaWrapper.remove();
+          };
+          if (fileType === "image") {
+            imageCount++;
+            const newImg = document.createElement("img");
+            newImg.src = url;
+            newImg.alt = `Uploaded image ${index + 1}`;
+            newImg.classList.add(
+              "w-56",
+              "h-52",
+              "object-cover",
+              "border",
+              "rounded-lg",
+              "shadow-sm",
+              "hover:shadow-lg",
+              "hover:shadow-black"
+            );
+            mediaWrapper.appendChild(newImg);
+          } else if (fileType === "video") {
+            videoCount++;
+            const newVideo = document.createElement("video");
+            newVideo.src = url;
+            newVideo.controls = true;
+            newVideo.classList.add(
+              "w-56",
+              "h-52",
+              "object-contain",
+              "border",
+              "rounded-lg",
+              "shadow-sm",
+              "hover:shadow-lg",
+              "hover:shadow-black"
+            );
+            mediaWrapper.appendChild(newVideo);
+          }
+          mediaName.textContent = file.name;
+          mediaWrapper.appendChild(cancelButton);
+          mediaWrapper.appendChild(mediaName);
+          if (fileType === "image") {
+            document.getElementById("image_count").textContent = imageCount;
+            imageContainer.appendChild(mediaWrapper);
+          } else if (fileType === "video") {
+            document.getElementById("video_count").textContent = videoCount;
+            videoContainer.appendChild(mediaWrapper);
+          }
+        });
+      }
     }
-  }
-</script>
-
+  </script>
 </html>

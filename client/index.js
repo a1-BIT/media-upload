@@ -1,15 +1,26 @@
-
 let imageCount = 0;
 let videoCount = 0;
 let imageSize = 0
 let videoSize = 0
-document.getElementById("image_count").textContent = imageCount;
-document.getElementById("video_count").textContent = videoCount;
-document.getElementById('image_size').textContent = getSizeFromBytes(0)
-document.getElementById('video_size').textContent = getSizeFromBytes(0)
+
+
+const imageContainer = document.getElementById("image_container");
+const fileInputNode = document.getElementById('file_upload')
+const imageCountNode = document.getElementById("image_count")
+const imageSizeNode = document.getElementById('image_size')
+const videoCountNode = document.getElementById('video_count')
+const videoSizeNode = document.getElementById('video_size')
+const alertMessageNode = document.getElementById('alert_message')
+
+imageCountNode.textContent = imageCount;
+imageSizeNode.textContent = getSizeFromBytes(0)
+videoCountNode.textContent = videoCount
+videoSizeNode.textContent = getSizeFromBytes(0)
+
+
 function getImgData(input) {
     if (input.files && input.files.length > 0) {
-        const imageContainer = document.getElementById("image_container");
+
         const videoContainer = document.getElementById("video_container");
 
         Array.from(input.files).forEach((file, index) => {
@@ -43,14 +54,14 @@ function getImgData(input) {
             );
             cancelButton.onclick = () => {
                 if (fileType == "video") {
-                    document.getElementById("video_count").textContent = --videoCount;
+                    videoCountNode.textContent = --videoCount
                     videoSize = videoSize - file.size
-                    document.getElementById("video_size").textContent = getSizeFromBytes(videoSize)
+                    videoSizeNode.textContent = getSizeFromBytes(videoSize)
                 }
                 if (fileType == "image") {
-                    document.getElementById("image_count").textContent = --imageCount;
+                    imageCountNode.textContent = --imageCount
                     imageSize = imageSize - file.size
-                    document.getElementById("image_size").textContent = getSizeFromBytes(imageSize)
+                    imageSizeNode.textContent = getSizeFromBytes(imageSize)
                 }
                 URL.revokeObjectURL(url);
                 mediaWrapper.remove();
@@ -97,12 +108,12 @@ function getImgData(input) {
             mediaWrapper.appendChild(sizeTab)
             if (fileType === "image") {
                 console.log('imageSize:', imageSize)
-                document.getElementById("image_count").textContent = imageCount;
-                document.getElementById("image_size").textContent = getSizeFromBytes(imageSize)
+                imageCountNode.textContent = imageCount
+                imageSizeNode.textContent = getSizeFromBytes(imageSize)
                 imageContainer.appendChild(mediaWrapper);
             } else if (fileType === "video") {
-                document.getElementById("video_count").textContent = videoCount;
-                document.getElementById('video_size').textContent = getSizeFromBytes(videoSize)
+                videoCountNode.textContent = videoCount
+                videoSizeNode.textContent = getSizeFromBytes(videoSize)
                 videoContainer.appendChild(mediaWrapper);
 
             }
@@ -145,6 +156,22 @@ function truncateStr(name) {
 
 }
 
-function clearAll() {
-    document.getElementById('file_upload').value = ''
+function clearAllImages() {
+    console.log('mageContainer.firstChild:',imageContainer.firstChild)
+    while (imageContainer.firstChild) {
+        imageContainer.removeChild(imageContainer.firstChild)
+    }
+    imageCountNode.textContent = imageCount = 0
+    imageSizeNode.textContent = getSizeFromBytes(0)
+    if (fileInputNode.files.length > 0) {
+        fileInputNode.value = ''
+
+    } else {
+        alertMessageNode.classList.remove('hidden')
+        alertMessageNode.classList.add('bg-red-400')
+        alertMessageNode.textContent = 'No Media Selected.'
+        setTimeout(() => {
+            alertMessageNode.classList.add('hidden')
+        }, 2000);
+    }
 }

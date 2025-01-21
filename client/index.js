@@ -5,6 +5,8 @@ let imageSize = 0
 let videoSize = 0
 document.getElementById("image_count").textContent = imageCount;
 document.getElementById("video_count").textContent = videoCount;
+document.getElementById('image_size').textContent = getSizeFromBytes(0)
+document.getElementById('video_size').textContent = getSizeFromBytes(0)
 function getImgData(input) {
     if (input.files && input.files.length > 0) {
         const imageContainer = document.getElementById("image_container");
@@ -141,4 +143,8 @@ function truncateStr(name) {
     }
     return name
 
+}
+
+function clearAll() {
+    document.getElementById('file_upload').value = ''
 }

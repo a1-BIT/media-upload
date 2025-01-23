@@ -5,6 +5,7 @@ let videoSize = 0
 
 
 const imageContainer = document.getElementById("image_container");
+const videoContainer = document.getElementById("video_container")
 const fileInputNode = document.getElementById('file_upload')
 const imageCountNode = document.getElementById("image_count")
 const imageSizeNode = document.getElementById('image_size')
@@ -20,9 +21,6 @@ videoSizeNode.textContent = getSizeFromBytes(0)
 
 function getImgData(input) {
     if (input.files && input.files.length > 0) {
-
-        const videoContainer = document.getElementById("video_container");
-
         Array.from(input.files).forEach((file, index) => {
             console.log('file:', file)
             const fileType = file.type.split("/")[0];
@@ -157,12 +155,32 @@ function truncateStr(name) {
 }
 
 function clearAllImages() {
-    console.log('mageContainer.firstChild:',imageContainer.firstChild)
     while (imageContainer.firstChild) {
         imageContainer.removeChild(imageContainer.firstChild)
     }
     imageCountNode.textContent = imageCount = 0
-    imageSizeNode.textContent = getSizeFromBytes(0)
+    imageSize = 0
+    imageSizeNode.textContent = getSizeFromBytes(imageSize)
+    if (fileInputNode.files.length > 0) {
+        fileInputNode.value = ''
+
+    } else {
+        alertMessageNode.classList.remove('hidden')
+        alertMessageNode.classList.add('bg-red-400')
+        alertMessageNode.textContent = 'No Media Selected.'
+        setTimeout(() => {
+            alertMessageNode.classList.add('hidden')
+        }, 2000);
+    }
+}
+
+function clearAllVideos() {
+    while (videoContainer.firstChild) {
+        videoContainer.removeChild(videoContainer.firstChild)
+    }
+    videoCountNode.textContent = videoCount = 0
+    videoSize = 0
+    videoSizeNode.textContent = getSizeFromBytes(videoSize)
     if (fileInputNode.files.length > 0) {
         fileInputNode.value = ''
 

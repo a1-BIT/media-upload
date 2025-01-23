@@ -3,8 +3,7 @@ let videoCount = 0;
 let imageSize = 0
 let videoSize = 0
 
-
-const imageContainer = document.getElementById("image_container");
+const imageContainer = document.getElementById("image_container")
 const videoContainer = document.getElementById("video_container")
 const fileInputNode = document.getElementById('file_upload')
 const imageCountNode = document.getElementById("image_count")
@@ -18,11 +17,10 @@ imageSizeNode.textContent = getSizeFromBytes(0)
 videoCountNode.textContent = videoCount
 videoSizeNode.textContent = getSizeFromBytes(0)
 
-
 function getImgData(input) {
     if (input.files && input.files.length > 0) {
         Array.from(input.files).forEach((file, index) => {
-            console.log('file:', file)
+            console.log('file:')
             const fileType = file.type.split("/")[0];
             const url = URL.createObjectURL(file);
 
@@ -132,16 +130,18 @@ function getSizeFromBytes(bytes) {
     return size.toFixed(3) + " " + units[index];
 }
 
-async function handleUpload() {
-    let url = 'http://localhost:4001/uploadMedia'
-    const data = { message: "Hello Server!" };
-    await fetch(url, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-            "Content-Type": "application/json"
-        },
-    })
+async function handleUpload(event) {
+    event.preventDefault()
+    console.log('event:',event)
+    // let url = 'http://localhost:4001/uploadMedia'
+    // const data = { message: "Hello Server!" };
+    // await fetch(url, {
+    //     method: "POST",
+    //     body: JSON.stringify(data),
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     },
+    // })
 }
 
 function truncateStr(name) {

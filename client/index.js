@@ -17,6 +17,7 @@ imageSizeNode.textContent = getSizeFromBytes(0)
 videoCountNode.textContent = videoCount
 videoSizeNode.textContent = getSizeFromBytes(0)
 
+
 function getImgData(input) {
     if (input.files && input.files.length > 0) {
         Array.from(input.files).forEach((file, index) => {
@@ -132,16 +133,19 @@ function getSizeFromBytes(bytes) {
 
 async function handleUpload(event) {
     event.preventDefault()
-    console.log('event:',event)
-    // let url = 'http://localhost:4001/uploadMedia'
-    // const data = { message: "Hello Server!" };
-    // await fetch(url, {
-    //     method: "POST",
-    //     body: JSON.stringify(data),
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    // })
+    console.log('fileInputNode:', fileInputNode.files[0])
+    const formData = new FormData()
+    formData.append('media', fileInputNode.files[0])
+
+    let url = 'http://localhost:4001/uploadMedia'
+    const data = { message: "Hello Server!" };
+    await fetch(url, {
+        method: "POST",
+        body: formData,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+    })
 }
 
 function truncateStr(name) {

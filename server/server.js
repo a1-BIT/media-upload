@@ -17,10 +17,26 @@ app.get('/welcome', (req, res) => {
     res.send({ msg: 'hello' })
 })
 
-app.post('/uploadMedia', (req, res) => {
-    console.log("AMIT")
-    console.log(req.body)
-    res.status(200).send()
+app.post('/uploadMedia', async (req, res) => {
+    return new Promise((resolve, reject) => {
+        const chunks = []
+        req.on("data", (data) => {
+            chunks.push(data)
+            // console.log(data, "K")
+        })
+        req.on("end", () => {
+            console.log(chunks, "C")
+            const aa = Buffer.concat(chunks)
+            console.log(aa,"AA")
+        })
+        req.on("error", () => {
+            reject()
+        })
+
+    })
+
+
+  
 })
 
 app.listen(configs.port, () => {

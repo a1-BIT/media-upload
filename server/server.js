@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from 'helmet'
 import configs from "./config.js";
-
+import './db/connection.js'
 const app = express()
 app.use(helmet())
 app.use(express.json())
@@ -22,12 +22,11 @@ app.post('/uploadMedia', async (req, res) => {
         const chunks = []
         req.on("data", (data) => {
             chunks.push(data)
-            // console.log(data, "K")
         })
         req.on("end", () => {
             console.log(chunks, "C")
             const aa = Buffer.concat(chunks)
-            console.log(aa,"AA")
+            console.log(aa, "AA")
         })
         req.on("error", () => {
             reject()
@@ -36,7 +35,7 @@ app.post('/uploadMedia', async (req, res) => {
     })
 
 
-  
+
 })
 
 app.listen(configs.port, () => {

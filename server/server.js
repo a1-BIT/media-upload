@@ -1,11 +1,14 @@
 import express from "express";
-import helmet from 'helmet'
+import helmet from "helmet";
 import configs from "./config.js";
-import './db/connection.js'
-const app = express()
-app.use(helmet())
-app.use(express.json())
+import "./db/connection.js"; // Ensure this initializes the DB connection
+import File from "./db/fileSchema.js";
 
+const app = express();
+app.use(helmet());
+app.use(express.json());
+
+// CORS headers (can use the `cors` library instead)
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -13,31 +16,45 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/welcome', (req, res) => {
-    res.send({ msg: 'hello' })
-})
+app.get("/welcome", (req, res) => {
+    res.send({ msg: "hello" });
+});
 
-app.post('/uploadMedia', async (req, res) => {
-    return new Promise((resolve, reject) => {
-        const chunks = []
+app.post("/uploadMedia", async (req, res) => {
+    try {
+        console.log(req.body, "BODY")
+        const chunks = [];
         req.on("data", (data) => {
-            chunks.push(data)
-        })
-        req.on("end", () => {
-            console.log(chunks, "C")
-            const aa = Buffer.concat(chunks)
-            console.log(aa, "AA")
-        })
-        req.on("error", () => {
-            reject()
-        })
+            chunks.push(data);
+        });
 
-    })
+        req.on("end", async () => {
+            try {
+                const buffer = Buffer.concat(chunks);
+                console.log("Received Buffer:", buffer);
 
+                console.log(req.headers['content-type'].split('boundary=')[1], "KK")
+                const newFile = new File({ file: buffer })
+                const savedFile = await newFile.save()
 
+                console.log("Database Update Result:", result);
+                res.status(201).send({ msg: "File saved successfully", fileId: savedFile._id });
+            } catch (err) {
+                console.error("Error processing file:", err);
+                res.status(500).send({ error: "Error processing file" });
+            }
+        });
 
-})
+        req.on("error", (err) => {
+            console.error("Request Error:", err);
+            res.status(500).send({ error: "Error receiving file" });
+        });
+    } catch (err) {
+        console.error("Unexpected Error:", err);
+        res.status(500).send({ error: "Unexpected error occurred" });
+    }
+});
 
 app.listen(configs.port, () => {
-    console.log(`Server is spining on port ${configs.port}`)
-})
+    console.log(`Server is running on port ${configs.port}`);
+});

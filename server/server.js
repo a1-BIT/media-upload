@@ -22,7 +22,6 @@ app.get("/welcome", (req, res) => {
 
 app.post("/uploadMedia", async (req, res) => {
     try {
-        console.log(req.body, "BODY")
         const chunks = [];
         req.on("data", (data) => {
             chunks.push(data);
@@ -33,12 +32,15 @@ app.post("/uploadMedia", async (req, res) => {
                 const buffer = Buffer.concat(chunks);
                 console.log("Received Buffer:", buffer);
 
-                console.log(req.headers['content-type'].split('boundary=')[1], "KK")
-                const newFile = new File({ file: buffer })
-                const savedFile = await newFile.save()
+                const boundary = req.headers['content-type'].split('boundary=')[1]
+                console.log('boundary:', boundary)
+                const parts = buffer.toString().split(boundary).slice(1, -1);
+                console.log('parts:', parts, parts.length)
+                // const newFile = new File({ file: buffer })
+                // const savedFile = await newFile.save()
 
-                console.log("Database Update Result:", result);
-                res.status(201).send({ msg: "File saved successfully", fileId: savedFile._id });
+                // console.log("Database Update Result:", result);
+                // res.status(201).send({ msg: "File saved successfully", fileId: savedFile._id });
             } catch (err) {
                 console.error("Error processing file:", err);
                 res.status(500).send({ error: "Error processing file" });
